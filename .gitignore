@@ -1,2 +1,4 @@
 # Files in the Presentation folder
-.Presentation/
+Presentation/
+.ipynb_checkpoints/
+Data/
