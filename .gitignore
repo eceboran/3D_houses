@@ -1,4 +1,8 @@
 # Files in the Presentation folder
 Presentation/
+# Jupyter Notebook files
 .ipynb_checkpoints/
-Data/
+# Data files
+/data/
+# Except for the metadata file
+!/data/metadata/GeoTIFF_1m_metadata_processed.csv
