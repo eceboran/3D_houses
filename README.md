@@ -1,77 +1,79 @@
 # 3D Houses
 
-- [Description](#Description)
+[Description](#Description)
+[Installation](#Installation)
+[Usage](#Usage)
+[Visuals](#Visuals)
+[Steps](#Steps)
+[Architecture](#Architecture)
+[Limitations](#Limitations)
+[Personal situation](#Personal situation)
+
 
 ## Description
-The main goal of this project is to model a house in Flanders in 3D using only the address.
-This project is a part of the [Becode.org AI Bootcamp](https://becode.org/learn/ai-bootcamp/) program.
+The main goal of this project is to model a house in Flanders in 3D using only the address. It uses several API's (Application Programming Interface) 
+provided by the Flanders 
+government, as well as datasets of precomputed data.
 
-### LIDAR
+The raw data was collected as part of the DHMV II [Digital Height Model Flanders II](https://overheid.vlaanderen.be/dhm-digitaal-hoogtemodel-vlaanderen-ii/) project. It was in the form of LIDAR (or Lidar) data. 
+"Lidar ... is a method for determining ranges (variable distance) by targeting an object with a laser and measuring 
+the time for the reflected light to return to the receiver."\[It\] can ... be used to make digital 3-D representations of areas 
+on the earth's surface..."[Lidar](https://en.wikipedia.org/wiki/Lidar/)
 
-LIDAR is a method to measure distance using light. 
-The device will illuminate a target with a laser light and a sensor will measure the reflection. 
-Differences in wavelength and return times will be used to get 3D representations of an area.
-DSM (Digital Surface Map) and DTM (Digital Terrain Map)
-
-Which are already computed and available here:
-
+From this data, DSM (Digital Surface Map) and DTM (Digital Terrain Map) data was computed. They are available here:
 - [DSM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dsm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DSM,%20raster,%201m)
 - [DTM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dtm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DTM,%20raster,%201m)
+
+These datasets both have 43 files, representing the following regions of Flanders:
+![Flanders](https://overheid.vlaanderen.be/sites/default/files/media/Digitale%20overheid/DHM/Opdrachtzones%20DHM-Vlaanderen%20II_2.jpg)
+
+This project is a part of the [Becode.org AI Bootcamp](https://becode.org/learn/ai-bootcamp/) program.
+
 
 ## Installation
 Download the repository from GitHub using:
 ```python
-requirements.txt
+git@github.com:eceboran/3D_houses.git
 ```
 
 The packages required to run the project can be found in:
 ```python
-git@github.com:eceboran/3D_houses.git
+requirements.txt
 ```
 
-### Anaconda
-Crete and activate your virtual environment.
+Crete and activate your virtual environment. Navigate to the main project repository that contains requirements.txt.
 To install the required packages in pip, in the terminal, run:
 
 ```python
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
-To install with anaconda, run:
+To install them with anaconda, run:
 ```python
 conda install --file requirements.txt 
 ```
 
-### Pip
-Open your terminal
-cd to the directory where the file requirements.txt is located
-Create and activate your virtual environment.
- 
-python3 -m pip install -r requirements.txt
-my_env/bin/python -m pip install -r requirements.txt
- 
 
 ## Usage
 In the terminal, navigate to the folder that contains the Jupyter notebook main.ipynb. 
-Open the notebook and run.
+Open and run the notebook.
 
 You will be asked to input an address in Flanders. The input request will be repeated until a valid address is provided.
 If there are several possible addresses, you will be given a list of suggested addresses.
 
 To quit, type:
-
 ```python
 quit
 ```
 as the address.
 
-## Visuals
 
+## Visuals
 Address in Flanders
 
 ![image name here](visuals/example.png)
 
-
 ## Steps
+
 This project required multiple steps, that could be completed independently and then merged.
 The steps are:
 
@@ -87,24 +89,28 @@ Reviewing packages used in DEM (digital elevatio model) related projects online 
 - Plotting. Plotting and saving 3D plots of a selected building.
   
 ## Architecture
-The project is structured as follows:
-
+The project is structured as below:
 ```
 3d-house-project
-│  README.md            :project description
-│  main.ipynb 			:jupyter notebook file to run to start the program
-│  requirements.txt     :list of required packages
-│  .gitignore           :files and folders ignored by git
+│  README.md             :project description
+│  main.ipynb 			 :jupyter notebook file to run to start the program
+│  create_metadata.ipynb :creates a dataframe for the metadata corresponding to the datasets:
+│						  [DSM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dsm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DSM,%20raster,%201m)
+│					      [DTM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dtm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DTM,%20raster,%201m)
+│  						  saves it under data/metadata	 
+│  requirements.txt      :list of required packages
+│  .gitignore            :files and folders ignored by git
 │
-└───data                :data directory
-│   │					 zip files can be downloaded here to be loaded locally
-│   └───metadata        :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
-└───utils               :directory contains all the core scripts of the program
-│    Address.py         :script to create a House object and get info
-│    Buildings.py       :script to associate the DSM and DTM tiffs to a House object
+└───data                 :data directory
+│   │					  zip files can be downloaded here to be loaded locally
+│   └───metadata         :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
+└───utils                :directory contains all the core scripts of the program
+│    Address.py          :script to create a House object and get info
+│    Buildings.py        :script to associate the DSM and DTM tiffs to a House object
 │ 
-└───visuals             :images for buildings
+└───visuals              :images for buildings
 ```
+
 
 ## Limitations
 - Limited to Flanders.
@@ -123,7 +129,6 @@ This project cannot access height information for buildings and corresponding ad
 ## Personal situation
 This project is my third (second individual) challenge at [BeCode](https://becode.org/), 
 following six weeks of learning basic and advanced Python concepts, data manipulation and visualization with Python.
-
 
 
 This project uses Black: The Uncompromising Code Formatter

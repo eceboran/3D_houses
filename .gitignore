@@ -1,12 +1,13 @@
 # Files in the Presentation folder
 Presentation/
-# Jupyter Notebook files
+# Jupyter Notebook backup files
 .ipynb_checkpoints/
 # Data files
-/data/
+data/
 # Except for the metadata folder
-!/data/metadata/
-
-/utils/__pycache__/
-/proj/
-/.git/
+!data/metadata/
+# Pycharm related folder
+utils/__pycache__/
+proj/
+# .git file
+.git/
