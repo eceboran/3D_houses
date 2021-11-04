@@ -1,170 +1,147 @@
+import os
+import numpy as np
+import rasterio as rs
 
 
-
-class CHM():
+class CHM:
     """
-    A class to represent an building in Flanders
-    Inherits from class Address
+    A class to represent surface of a building
     ...
     Attributes
     ----------
-    input_address : str
-        Input address from the user
-    metadata_file_path: str (optional)
-        File path for the metadata csv file
-    valid_address_conditional: bool
-        True if the input address is valid
-    suggestions: dict
-        Suggestions for the input address
-    address_info: dict
-        Detailed address information, including location
-    address: str
-        Formatted address
-    street_name: str
-        Street name
-    house_no: str
-        House number
-    municipality: str
-        Municipality name
-    zipcode: str
-        Municipality zipcode
-    Location: dict
-        Location in WGS87 and Lambert73 coordinates
-    building_polygon
-        Shapely polygon object representing the building
-    building_coords
-        Coordinates of the building polygon with n sides in the form
-        [[x1, y1]
-         [x2, y2]
-         ...
-         [xn, yn]]
-    area: float
-        Area of the building
-    default_metadata_file_path: str
-        Default path for GeoTIFF metadata csv file
-        Used if metadata_file_path is not given
-    metadata_all_files
-        DataFrame for GeoTIFF metadata for all files
-    metadata_single_file
-        DataFrame for GeoTIFF file(s) containing the building polygon
+    building
+        An instance of class Building representing a building in Flanders
 
     Methods
     -------
-    get_default_GeoTIFF_metadata_file_path(cls)
-        Gets the default file path for the GeoTIFF metadata csv file
-    load_GeoTIFF_metadata(cls, csv_file_path: str)
-        Loads GeoTIFF metadata from given csv file
-    get_GeoTIFF_file_index_single_point(self, x: float, y: float)
-        Gets the GeoTIFF file number for the file containing the point (x,y)
-    get_building_GeoTIFF_metadata(self)
-        Gets the GeoTIFF metadata for the file(s) containing the building polygon
+    dilate_building_polygon(dilation: int)
+        Dilates the polygon
+    get_masked_raster(file_link)
+    get_local_zip_file_path(file_link)
+    get_CHM()
     """
 
-    def __init__(self, input_address: str, metadata_file_path: str = ""):
+    dem_data_types = ["DSM", "DTM"]
+
+    def __init__(self, selected_building, use_local_copy=False):
         """
-        Initializes an instance of the class Building
-        :param input_address: input address from the user
+        Initializes an instance of the class CHM (Canopy Height Model)
+        :param selected_building: An instance of class Building
         """
-        # Initialize the instance from the parent class
-        super().__init__(input_address)
+        # Assign the building object
+        self.building = selected_building
 
-        # For a valid address, get the building information
-        if self.valid_address_conditional:
-            self.address_info = self.get_address_location(self.input_address)
-        else:
-            return
+        # Dilate the building polygon
+        dilation = 5  # in meters
+        self.dilate_building_polygon()
 
-        # Generate default (relative) file path for GeoTIFF metadata
-        self.get_default_GeoTIFF_metadata_file_path()
+        # Load masked data for both DSM and DTM
+        self.file_links = []
+        self.masked_rasters = []
+        self.masked_transforms = []
+        self.nodata_values = []
+        for dem_data_type in self.dem_data_types:
+            file_link = self.building.metadata_building[
+                dem_data_type.lower() + "_file_link"
+            ].values[0]
 
-        # GeoTIFF Metadata file path
-        if len(metadata_file_path) > 0:
-            self.metadata_file_path = metadata_file_path
-        else:
-            self.metadata_file_path = self.default_metadata_file_path
+            # If use_local_copy is True, a local copy of the zip file can be used
+            if use_local_copy:
+                file_link = self.get_local_zip_file_path(file_link)
 
-        # Load GeoTIFF metadata
-        self.load_GeoTIFF_metadata(self.metadata_file_path)
+            self.file_links.append(file_link)
+            masked_raster, masked_transform, nodata_value = self.get_masked_raster(
+                file_link
+            )
+            # masked_raster = []
+            # masked_transform = []
+            # nodata_value = []
 
-        # Get GeoTIFF file numbers corresponding to the building polygon
-        self.get_building_GeoTIFF_metadata()
+            print(file_link)
+
+            self.masked_rasters.append(masked_raster)
+            self.masked_transforms.append(masked_transform)
+            self.nodata_values.append(nodata_value)
+
+        # Calculate the CHM (Canopy Height Model) from DSM and DTM data
+        self.get_CHM()
+
+        # Calculate the height of the building
+        self.height = np.nanmax(self.masked_raster_chm)
 
     def __str__(self):
         """
         Prints the address
         """
-        return f"{self.address}"
+        return f"{self.building.address}, maximum height: {self.height:.1f} meters"
 
-    @classmethod
-    def get_default_GeoTIFF_metadata_file_path(cls):
-        """
-        Gets the default file path for the GeoTIFF metadata csv file
-        """
-        # File paths for metadata for DSM and DTM datasets
-        metadata_folder_path = ".\\data\\metadata\\"
+    def dilate_building_polygon(self, dilation: float = 2):
 
-        # Metadata csv file path
-        default_metadata_file_path = os.path.join(
-            metadata_folder_path, "GeoTIFF_1m_metadata_processed.csv"
+        self.dilated_polygon = self.building.building_polygon.buffer(dilation)
+
+    def get_masked_raster(self, file_link):
+
+        # GeoTIFF file path
+        file_path = file_link
+
+        # Polygon for masking
+        dilated_polygon = self.dilated_polygon
+
+        # Access the TIFF file
+        try:
+            with rs.open(file_path) as src:
+                # Mask the file with the dilated polygon
+                nodata_value = src.nodata
+                masked_raster, masked_transform = rs_mask(
+                    src,
+                    [dilated_polygon],
+                    all_touched=True,
+                    nodata=nodata_value,
+                    filled=True,
+                    crop=True,
+                    pad=True,
+                    indexes=1,
+                )
+        except:
+            masked_raster, masked_transform = np.ndarray(0), np.ndarray(0)
+            nodata_value = np.nan
+
+        return masked_raster, masked_transform, nodata_value
+
+    def get_local_zip_file_path(self, file_link):
+
+        local_file_link = file_link.replace(
+            "zip+https://downloadagiv.blob.core.windows.net/dhm-vlaanderen-ii-dsm-raster-1m/",
+            "zip://" + os.getcwd() + "\\data\\",
         )
-
-        cls.default_metadata_file_path = default_metadata_file_path
-
-    @classmethod
-    def load_GeoTIFF_metadata(cls, csv_file_path: str):
-        """
-        Loads GeoTIFF metadata from given csv file
-        :param csv_file_path: A string representing an address
-        """
-        # Load metadata DataFrame
-        df_metadata = pd.read_csv(csv_file_path, sep=",", index_col=0)
-        cls.metadata_all_files = df_metadata
-
-    def get_GeoTIFF_file_index_single_point(self, x: float, y: float):
-        """
-        Gets the GeoTIFF file number for the file containing the point (x,y)
-        :param x: x-coordinate of the point
-        :param y: y-coordinate of the point
-        """
-        df = self.metadata_all_files
-        index_cond = (x > df.left) & (x <= df.right) & (y > df.bottom) & (y <= df.top)
-        index_file = np.flatnonzero(index_cond)[0]
-
-        return index_file
-
-    def get_building_GeoTIFF_metadata(self):
-        """
-        Gets the GeoTIFF metadata for the file(s) containing the building polygon
-        """
-        # Boundaries of the polygon (left bottom right top)
-        polygon_bounds = self.building_polygon.bounds
-
-        index_file = []
-        # Top left
-        index_file.append(
-            self.get_GeoTIFF_file_index_single_point(
-                polygon_bounds[0], polygon_bounds[3]
-            )
+        local_file_link = local_file_link.replace(
+            "zip+https://downloadagiv.blob.core.windows.net/dhm-vlaanderen-ii-dtm-raster-1m/",
+            "zip://" + os.getcwd() + "\\data\\",
         )
-        # Top right
-        index_file.append(
-            self.get_GeoTIFF_file_index_single_point(
-                polygon_bounds[2], polygon_bounds[3]
-            )
-        )
-        # Bottom left
-        index_file.append(
-            self.get_GeoTIFF_file_index_single_point(
-                polygon_bounds[0], polygon_bounds[1]
-            )
-        )
-        # Bottom right
-        index_file.append(
-            self.get_GeoTIFF_file_index_single_point(
-                polygon_bounds[2], polygon_bounds[1]
-            )
-        )
+        local_file_link.replace('\\','/')
+        return local_file_link
 
-        self.metadata_building = (
-            self.metadata_all_files.iloc[index_file]
-        ).drop_duplicates()
+    def get_CHM(self):
+        # Gets the Canopy Height Model for the building
+
+        # Subtract the DSM data from DTM
+        self.masked_raster_chm = self.masked_rasters[0] - self.masked_rasters[1]
+        # Set values out of the mask to numpy nan
+        mask_nodata = self.masked_rasters[0] == self.nodata_values[0]
+        self.masked_raster_chm[mask_nodata] = np.nan
+
+    def plot_CHM_3d(self):
+
+        z_data = self.masked_raster_chm
+        x, y = np.arange(z_data.shape[1]), np.arange(z_data.shape[0])
+        fig = go.Figure(data=[go.Surface(z=z_data, x=x, y=y)])
+        fig.update_layout(
+            title=print(self),
+            xaxis_title="x",
+            yaxis_title="y",
+            width=800,
+            height=800,
+        )
+        fig.show()
+
+        return fig

@@ -1,23 +1,5 @@
 # 3D Houses
 
-## Table of contents
-
-[Description](#Description)
-
-[Installation](#Installation)
-
-[Usage](#Usage)
-
-[Visuals](#Visuals)
-
-[Steps](#Steps)
-
-[Architecture](#Architecture)
-
-[Limitations](#Limitations)
-
-[Personal situation](#Personal situation)
-
 
 ## Description
 The main goal of this project is to model a house in Flanders in 3D using only the address. It uses several API's (Application Programming Interface) 
@@ -27,7 +9,7 @@ government, as well as datasets of precomputed data.
 The raw data was collected as part of the DHMV II [Digital Height Model Flanders II](https://overheid.vlaanderen.be/dhm-digitaal-hoogtemodel-vlaanderen-ii/) project. It was in the form of LIDAR (or Lidar) data. 
 "Lidar ... is a method for determining ranges (variable distance) by targeting an object with a laser and measuring 
 the time for the reflected light to return to the receiver."\[It\] can ... be used to make digital 3-D representations of areas 
-on the earth's surface..."[Lidar](https://en.wikipedia.org/wiki/Lidar/)
+on the earth's surface..."[Lidar in Wikipedia](https://en.wikipedia.org/wiki/Lidar/)
 
 From this data, DSM (Digital Surface Map) and DTM (Digital Terrain Map) data was computed. They are available here:
 - [DSM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dsm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DSM,%20raster,%201m)
@@ -77,9 +59,10 @@ as the address.
 
 
 ## Visuals
-Address in Flanders
-
-![image name here](visuals/example.png)
+Antwerp Palace of Justice is at the address Bolivarplaats 20, 2000 Antwerpen. According to 
+[Wikipedia](https://en.wikipedia.org/wiki/Palace_of_Justice_Antwerp/), it is 18 meters high.
+The computed height of the building (excluding the towers) verifies this.
+![image name here](visuals/Antwerp_Palace_of_Justice.png)
 
 ## Steps
 
@@ -101,23 +84,24 @@ Reviewing packages used in DEM (digital elevatio model) related projects online 
 The project is structured as below:
 ```
 3d-house-project
-│  README.md             :project description
-│  main.ipynb 			 :jupyter notebook file to run to start the program
-│  create_metadata.ipynb :creates a dataframe for the metadata corresponding to the datasets:
-│						  [DSM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dsm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DSM,%20raster,%201m)
-│					      [DTM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dtm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DTM,%20raster,%201m)
-│  						  saves it under data/metadata	 
-│  requirements.txt      :list of required packages
-│  .gitignore            :files and folders ignored by git
+│  README.md             # project description
+│  main.ipynb 			 # jupyter notebook file to run to start the program
+│  create_metadata.ipynb # creates a dataframe for the metadata corresponding to the datasets:
+│  [DSM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dsm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DSM,%20raster,%201m)
+│  [DTM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dtm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DTM,%20raster,%201m)
+│  saves it under data/metadata	 
+│  requirements.txt      # list of required packages
+│  .gitignore            # files and folders ignored by git
 │
-└───data                 :data directory
+└───data                 # data directory
 │   │					  zip files can be downloaded here to be loaded locally
-│   └───metadata         :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
-└───utils                :directory contains all the core scripts of the program
-│    Address.py          :script to create a House object and get info
-│    Buildings.py        :script to associate the DSM and DTM tiffs to a House object
-│ 
-└───visuals              :images for buildings
+│   └───metadata         # contains metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
+│                         GeoTIFF_1m_metadata_processed.csv
+└───utils                # code directory
+│    Address.py          # script defining the Address class
+│    Buildings.py        # script defining the Building class
+│    CHM.py  			 # script defining the CHM class
+└───visuals              # image directory
 ```
 
 
