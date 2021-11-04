@@ -1,5 +1,7 @@
 # 3D Houses
 
+## Table of contents
+
 [Description](#Description)
 [Installation](#Installation)
 [Usage](#Usage)
