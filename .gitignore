@@ -2,10 +2,10 @@
 Presentation/
 # Jupyter Notebook backup files
 .ipynb_checkpoints/
-# Data files
-data/
 # Except for the metadata folder
 !data/metadata/
+# Data files
+data/*
 # Pycharm related folder
 utils/__pycache__/
 proj/
