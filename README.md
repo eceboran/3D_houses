@@ -124,5 +124,5 @@ This project is my third (second individual) challenge at [BeCode](https://becod
 following six weeks of learning basic and advanced Python concepts, data manipulation and visualization with Python.
 
 
-This project uses Black: The Uncompromising Code Formatter
+This project uses Black: The Uncompromising Code Formatter 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
