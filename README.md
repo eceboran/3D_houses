@@ -1,42 +1,128 @@
 # 3D Houses
 
+- [Description](#Description)
+
 ## Description
+The main goal of this project is to model a house in Flanders in 3D using only the address.
 This project is a part of the [Becode.org AI Bootcamp](https://becode.org/learn/ai-bootcamp/) program.
+
+### LIDAR
+
+LIDAR is a method to measure distance using light. 
+The device will illuminate a target with a laser light and a sensor will measure the reflection. 
+Differences in wavelength and return times will be used to get 3D representations of an area.
+DSM (Digital Surface Map) and DTM (Digital Terrain Map)
+
+Which are already computed and available here:
+
+- [DSM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dsm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DSM,%20raster,%201m)
+- [DTM](http://www.geopunt.be/download?container=dhm-vlaanderen-ii-dtm-raster-1m&title=Digitaal%20Hoogtemodel%20Vlaanderen%20II,%20DTM,%20raster,%201m)
 
 ## Installation
 Download the repository from GitHub using:
 ```python
-git@github.com:eceboran/3D_houses.git`
+requirements.txt
 ```
-The following libraries are required to run the program:
-- 
+
+The packages required to run the project can be found in:
+```python
+git@github.com:eceboran/3D_houses.git
+```
+
+### Anaconda
+Crete and activate your virtual environment.
+To install the required packages in pip, in the terminal, run:
+
+```python
+pip install -r requirements.txt
+```
+To install with anaconda, run:
+```python
+conda install --file requirements.txt 
+```
+
+### Pip
+Open your terminal
+cd to the directory where the file requirements.txt is located
+Create and activate your virtual environment.
+ 
+python3 -m pip install -r requirements.txt
+my_env/bin/python -m pip install -r requirements.txt
+ 
 
 ## Usage
-In the terminal, navigate to the folder that contains main.py. To start the program, run:
-```python
-python main.py
-```
-Alternatively, you can open main.py in an IDE and run it there.
+In the terminal, navigate to the folder that contains the Jupyter notebook plot_3d_house_from_address.ipynb. 
+Open the notebook and run.
 
-The branch `main` of the repository contains the must-have version with the basic funcionalities.
+You will be asked to input an address in Flanders. The input request will be repeated until a valid address is provided.
+If there are several possible addresses, you will be given a list of suggested addresses.
+
+To quit, type:
+
+```python
+quit
+```
+as the address.
 
 ## Visuals
 
+Address in Flanders
 
-## Contributors
+![image name here](visuals/example.png)
 
 
-## Timeline
+## Steps
+This project required multiple steps, that could be completed independently and then merged.
+The steps are:
 
-| Day  | Completed tasks                                                |
-| ---- | -------------------------------------------------------------- |
-| 1    | *** 												|
-|      | ***                  				|
-| 2    | ***	|
-|      | ***                      		|
+- Research. Reading on LIDAR, DSM and DTM data, coordinate systems, projections and GeoTIFF files.
+Reviewing packages used in DEM (digital elevatio model) related projects online to get ideas on where to start.
+- Data exploration. Opening the data and looking at the contents in detail to understand how they can be used. 
+- Metadata creation. Creating a metadata file from all DSM and DTM files to save file links and GeoTIFF boundaries.
+- Address API. Retrieving information on an address in Flanders with an API.
+- Building API. Retrieving information on a building in Flanders with an API.
+- File selection. Selection of GeoTIFF file that contains the building.
+- Online data access. Loading DSM and DTM files directly from GeoTIFF files in online zip files.
+- CHM calculation. Calculating CHM using DSM and DTM data.
+- Plotting. Plotting and saving 3D plots of a selected building.
+  
+## Architecture
+The project is structured as follows:
+
+```
+3d-house-project
+│   README.md               :project description
+│   plot_3d_house_from_address.ipynb  :jupyter notebook file to run to start the program
+│   requirements.txt        :list of required packages
+│   .gitignore              :files and folders ignored by git
+│
+└───data                    :data directory
+│   │						 zip files can be downloaded here to be loaded locally
+│   └───metadata            :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
+└───utils                    :directory contains all the core scripts of the program
+│ │   Address.py            :script to create a House object and get info
+│ │   Buildings.py          :script to associate the DSM and DTM tiffs to a House object
+│ │
+│ └─visuals              :images for buildings
+```
+
+## Limitations
+- Limited to Flanders.
+This project can only plot buildings in Flanders.
+- Incorrect location from API.
+For some addresses, the API may not give the correct location of the building.
+- Execution time
+As the files are accessed online, the execution time is slower than for local files.
+- Buildings contained by multiple GeoTIFF files.
+This project does not yet consider buildings that do not fit in a single GeoTIFF file.
+- Newer buildings.
+The DEM database was formed by Geopunt Flanders between 2013 and 2015.
+This project cannot access height information for buildings and corresponding addresses formed after 2015. 
 
 
 ## Personal situation
+This project is my third (second individual) challenge at [BeCode](https://becode.org/), 
+following six weeks of learning basic and advanced Python concepts, data manipulation and visualization with Python.
 
 
 
