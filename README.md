@@ -3,12 +3,19 @@
 ## Table of contents
 
 [Description](#Description)
+
 [Installation](#Installation)
+
 [Usage](#Usage)
+
 [Visuals](#Visuals)
+
 [Steps](#Steps)
+
 [Architecture](#Architecture)
+
 [Limitations](#Limitations)
+
 [Personal situation](#Personal situation)
 
 
