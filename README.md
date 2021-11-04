@@ -40,14 +40,14 @@ The packages required to run the project can be found in:
 ```python
 requirements.txt
 ```
-
-Crete and activate your virtual environment. Navigate to the main project repository that contains requirements.txt.
-To install the required packages in pip, in the terminal, run:
-
+To install all required packages, follow these steps:
+- Crete and activate your virtual environment. 
+- Navigate to the main project repository that contains requirements.txt.
+- To install the required packages in pip, in the terminal, run:
 ```python
 python3 -m pip install -r requirements.txt
 ```
-To install them with anaconda, run:
+- To install them with anaconda, run:
 ```python
 conda install --file requirements.txt 
 ```
@@ -75,7 +75,7 @@ Address in Flanders
 ## Steps
 
 This project required multiple steps, that could be completed independently and then merged.
-The steps are:
+The steps were:
 
 - Research. Reading on LIDAR, DSM and DTM data, coordinate systems, projections and GeoTIFF files.
 Reviewing packages used in DEM (digital elevatio model) related projects online to get ideas on where to start.
