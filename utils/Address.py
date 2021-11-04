@@ -36,6 +36,8 @@ class Address:
          [x2, y2]
          ...
          [xn, yn]]
+    area: float
+        Area of the building
 
     Methods
     -------
@@ -82,9 +84,13 @@ class Address:
             for attr in ["municipality", "zipcode", "street_name", "house_no"]
         }
 
+        # Get the shape of the building in 2D
         self.building_polygon, self.building_coords = self.get_building_shape(
             address_params
         )
+
+        # Get the area of the building
+        self.area = self.building_polygon.area
 
     def __str__(self):
         """

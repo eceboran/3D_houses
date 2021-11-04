@@ -51,7 +51,7 @@ my_env/bin/python -m pip install -r requirements.txt
  
 
 ## Usage
-In the terminal, navigate to the folder that contains the Jupyter notebook plot_3d_house_from_address.ipynb. 
+In the terminal, navigate to the folder that contains the Jupyter notebook main.ipynb. 
 Open the notebook and run.
 
 You will be asked to input an address in Flanders. The input request will be repeated until a valid address is provided.
@@ -91,19 +91,19 @@ The project is structured as follows:
 
 ```
 3d-house-project
-│   README.md               :project description
-│   plot_3d_house_from_address.ipynb  :jupyter notebook file to run to start the program
-│   requirements.txt        :list of required packages
-│   .gitignore              :files and folders ignored by git
+│  README.md            :project description
+│  main.ipynb 			:jupyter notebook file to run to start the program
+│  requirements.txt     :list of required packages
+│  .gitignore           :files and folders ignored by git
 │
-└───data                    :data directory
-│   │						 zip files can be downloaded here to be loaded locally
-│   └───metadata            :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
-└───utils                    :directory contains all the core scripts of the program
-│    Address.py            :script to create a House object and get info
-│    Buildings.py          :script to associate the DSM and DTM tiffs to a House object
+└───data                :data directory
+│   │					 zip files can be downloaded here to be loaded locally
+│   └───metadata        :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
+└───utils               :directory contains all the core scripts of the program
+│    Address.py         :script to create a House object and get info
+│    Buildings.py       :script to associate the DSM and DTM tiffs to a House object
 │ 
-└─visuals              :images for buildings
+└───visuals             :images for buildings
 ```
 
 ## Limitations

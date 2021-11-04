@@ -42,6 +42,8 @@ class Building(Address):
          [x2, y2]
          ...
          [xn, yn]]
+    area: float
+        Area of the building
     default_metadata_file_path: str
         Default path for GeoTIFF metadata csv file
         Used if metadata_file_path is not given
