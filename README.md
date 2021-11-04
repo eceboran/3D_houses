@@ -59,10 +59,9 @@ as the address.
 
 
 ## Visuals
-Below is the Antwerp Palace of Justice at the address Bolivarplaats 20, 2000 Antwerpen.
-
-The a
-
+Antwerp Palace of Justice is at the address Bolivarplaats 20, 2000 Antwerpen. According to 
+[Wikipedia](https://en.wikipedia.org/wiki/Palace_of_Justice_Antwerp/), it is 18 meters high.
+The computed height of the building (excluding the towers) verifies this.
 ![image name here](visuals/Antwerp_Palace_of_Justice.png)
 
 ## Steps
@@ -102,7 +101,7 @@ The project is structured as below:
 │    Address.py          # script defining the Address class
 │    Buildings.py        # script defining the Building class
 │    CHM.py  			 # script defining the CHM class
-└───visuals              # images for buildings
+└───visuals              # image directory
 ```
 
 
@@ -125,5 +124,5 @@ This project is my third (second individual) challenge at [BeCode](https://becod
 following six weeks of learning basic and advanced Python concepts, data manipulation and visualization with Python.
 
 
-This project uses Black: The Uncompromising Code Formatter
+This project uses Black: The Uncompromising Code Formatter 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)

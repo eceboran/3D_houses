@@ -1,4 +1,13 @@
 # Files in the Presentation folder
 Presentation/
+# Jupyter Notebook backup files
 .ipynb_checkpoints/
-Data/
+# Data files
+data/*
+# Except for the metadata folder
+!data/metadata/GeoTIFF_1m_metadata_processed.csv
+# Pycharm related folder
+utils/__pycache__/
+proj/
+# .git file
+.git/
