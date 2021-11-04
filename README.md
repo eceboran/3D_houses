@@ -100,10 +100,10 @@ The project is structured as follows:
 │   │						 zip files can be downloaded here to be loaded locally
 │   └───metadata            :metadata for the Geopunt Flanders DSM and DTM (1 meter resolution) datasets
 └───utils                    :directory contains all the core scripts of the program
-│ │   Address.py            :script to create a House object and get info
-│ │   Buildings.py          :script to associate the DSM and DTM tiffs to a House object
-│ │
-│ └─visuals              :images for buildings
+│    Address.py            :script to create a House object and get info
+│    Buildings.py          :script to associate the DSM and DTM tiffs to a House object
+│ 
+└─visuals              :images for buildings
 ```
 
 ## Limitations
