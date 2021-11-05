@@ -6,8 +6,8 @@ Presentation/
 data/*
 # Except for the metadata folder
 !data/metadata/GeoTIFF_1m_metadata_processed.csv
-# Pycharm related folder
+# Pycharm related folders
 utils/__pycache__/
 proj/
-# .git file
+# .git folder
 .git/
