@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import rasterio as rs
 from rasterio.mask import mask as rs_mask
@@ -52,21 +51,17 @@ class CHM:
                 file_link = self.get_local_zip_file_path(file_link)
 
             self.file_links.append(file_link)
+            print("Accessing data at " + file_link)
             masked_raster, masked_transform, nodata_value = self.get_masked_raster(
                 file_link
             )
-            # masked_raster = []
-            # masked_transform = []
-            # nodata_value = []
-
-            print(file_link)
 
             self.masked_rasters.append(masked_raster)
             self.masked_transforms.append(masked_transform)
             self.nodata_values.append(nodata_value)
 
         # Calculate the CHM (Canopy Height Model) from DSM and DTM data
-        if masked_raster != (0,):  # if valid data was extracted
+        if masked_raster.any():  # if valid data was extracted
             self.get_CHM()
         else:
             return
@@ -78,7 +73,7 @@ class CHM:
         """
         Prints the address
         """
-        return f"{self.building.address}, maximum height: {self.height:.1f} meters"
+        return f"{self.building}\nMaximum height: {self.height:.1f} meters, area: {self.building.area:.1f} meter squares"""
 
     def dilate_building_polygon(self, dilation: float = 2):
 
@@ -93,23 +88,23 @@ class CHM:
         dilated_polygon = self.dilated_polygon
 
         # Access the TIFF file
-        try:
-            with rs.open(file_path) as src:
-                # Mask the file with the dilated polygon
-                nodata_value = src.nodata
-                masked_raster, masked_transform = rs_mask(
-                    src,
-                    [dilated_polygon],
-                    all_touched=True,
-                    nodata=nodata_value,
-                    filled=True,
-                    crop=True,
-                    pad=True,
-                    indexes=1,
-                )
-        except:
-            masked_raster, masked_transform = np.ndarray(0), np.ndarray(0)
-            nodata_value = np.nan
+        # try:
+        with rs.open(file_path) as src:
+            # Mask the file with the dilated polygon
+            nodata_value = src.nodata
+            masked_raster, masked_transform = rs_mask(
+                src,
+                [dilated_polygon],
+                all_touched=True,
+                nodata=nodata_value,
+                filled=True,
+                crop=True,
+                pad=True,
+                indexes=1,
+            )
+        # except:
+        # masked_raster, masked_transform = np.ndarray(0), np.ndarray(0)
+        # nodata_value = np.nan
 
         return masked_raster, masked_transform, nodata_value
 
@@ -121,7 +116,7 @@ class CHM:
         )
         local_file_link = local_file_link.replace(
             "zip+https://downloadagiv.blob.core.windows.net/dhm-vlaanderen-ii-dtm-raster-1m/",
-            "zip://" + os.getcwd() + "\\data\\",
+            "zip://.\\data\\",
         )
         local_file_link.replace("\\", "/")
         return local_file_link
