@@ -1,6 +1,8 @@
 import os
 import numpy as np
 import rasterio as rs
+from rasterio.mask import mask as rs_mask
+import plotly.graph_objects as go
 
 
 class CHM:
@@ -64,7 +66,10 @@ class CHM:
             self.nodata_values.append(nodata_value)
 
         # Calculate the CHM (Canopy Height Model) from DSM and DTM data
-        self.get_CHM()
+        if masked_raster != (0,):  # if valid data was extracted
+            self.get_CHM()
+        else:
+            return
 
         # Calculate the height of the building
         self.height = np.nanmax(self.masked_raster_chm)
@@ -112,13 +117,13 @@ class CHM:
 
         local_file_link = file_link.replace(
             "zip+https://downloadagiv.blob.core.windows.net/dhm-vlaanderen-ii-dsm-raster-1m/",
-            "zip://" + os.getcwd() + "\\data\\",
+            "zip://.\\data\\",
         )
         local_file_link = local_file_link.replace(
             "zip+https://downloadagiv.blob.core.windows.net/dhm-vlaanderen-ii-dtm-raster-1m/",
             "zip://" + os.getcwd() + "\\data\\",
         )
-        local_file_link.replace('\\','/')
+        local_file_link.replace("\\", "/")
         return local_file_link
 
     def get_CHM(self):
