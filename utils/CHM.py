@@ -88,25 +88,26 @@ class CHM:
         dilated_polygon = self.dilated_polygon
 
         # Access the TIFF file
-        # try:
-        with rs.open(file_path) as src:
-            # Mask the file with the dilated polygon
-            nodata_value = src.nodata
-            masked_raster, masked_transform = rs_mask(
-                src,
-                [dilated_polygon],
-                all_touched=True,
-                nodata=nodata_value,
-                filled=True,
-                crop=True,
-                pad=True,
-                indexes=1,
-            )
-        # except:
-        # masked_raster, masked_transform = np.ndarray(0), np.ndarray(0)
-        # nodata_value = np.nan
-
+        try:
+            with rs.open(file_path) as src:
+                # Mask the file with the dilated polygon
+                nodata_value = src.nodata
+                masked_raster, masked_transform = rs_mask(
+                    src,
+                    [dilated_polygon],
+                    all_touched=True,
+                    nodata=nodata_value,
+                    filled=True,
+                    crop=True,
+                    pad=True,
+                    indexes=1,
+                )
+        except:
+            masked_raster, masked_transform = np.ndarray(0), np.ndarray(0)
+            nodata_value = np.nan
+            
         return masked_raster, masked_transform, nodata_value
+
 
     def get_local_zip_file_path(self, file_link):
 
