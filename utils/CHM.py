@@ -73,7 +73,7 @@ class CHM:
         """
         Prints the address
         """
-        return f"{self.building}\nMaximum height: {self.height:.1f} meters, area: {self.building.area:.1f} meter squares"""
+        return f"{self.building}\nMaximum height: {self.height:.1f} meters, area: {self.building.area:.1f} meter\u00b2"""
 
     def dilate_building_polygon(self, dilation: float = 2):
 
