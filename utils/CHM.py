@@ -74,7 +74,7 @@ class CHM:
         Prints the address
         """
         return f"{self.building}\nMaximum height: {self.height:.1f} meters, area: {self.building.area:.1f} meter\u00b2"""
-    
+      
     def dilate_building_polygon(self, dilation: float = 2):
 
         self.dilated_polygon = self.building.building_polygon.buffer(dilation)
@@ -105,8 +105,9 @@ class CHM:
         except:
             masked_raster, masked_transform = np.ndarray(0), np.ndarray(0)
             nodata_value = np.nan
-
+            
         return masked_raster, masked_transform, nodata_value
+
 
     def get_local_zip_file_path(self, file_link):
 
